@@ -1,0 +1,36 @@
+---
+- name: Install nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Proxy config for port {{ proxy_listen_port }}
+  copy:
+    dest: /etc/nginx/sites-available/{{ proxy_site_conf }}
+    content: |
+      server {
+          listen {{ proxy_listen_port }};
+          location / {
+              proxy_pass http://{{ hostvars['upstream']['ansible_host'] }}:{{ upstream_listen_port }};
+          }
+      }
+  notify: reload nginx
+
+- name: Enable proxy site
+  file:
+    src: /etc/nginx/sites-available/{{ proxy_site_conf }}
+    dest: /etc/nginx/sites-enabled/{{ proxy_site_conf }}
+    state: link
+    force: yes
+
+- name: Remove default nginx site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Ensure nginx is started
+  service:
+    name: nginx
+    state: started
+    enabled: true

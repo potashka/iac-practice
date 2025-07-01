@@ -1,0 +1,18 @@
+---
+- name: Common base setup
+  hosts: all
+  become: true
+  roles:
+    - base
+
+- name: Upstream Nginx
+  hosts: upstream
+  become: true
+  roles:
+    - nginx_upstream
+
+- name: Proxy Nginx
+  hosts: proxy
+  become: true
+  roles:
+    - nginx_proxy

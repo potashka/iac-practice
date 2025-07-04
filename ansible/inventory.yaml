@@ -1,8 +1,8 @@
 all:
   hosts:
     proxy:
-      ansible_host: 51.250.12.34
+      ansible_host: 158.160.36.167
     upstream:
-      ansible_host: 51.250.12.56
+      ansible_host: 158.160.49.225
     common:
-      ansible_host: 51.250.12.78
+      ansible_host: 51.250.80.39
